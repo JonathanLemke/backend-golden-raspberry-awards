@@ -9,11 +9,11 @@ class Movie extends Model
 {
     use HasFactory;
 
-    protected $table = 'movies';
-
     protected $fillable = [
-        'movie_name',
-        'producer',
-        'win_at',
+        'year',
+        'title',
+        'studios',
+        'producers',
+        'winner'
     ];
 }

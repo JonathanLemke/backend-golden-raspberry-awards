@@ -9,13 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->string('movie_name');
-            $table->string('producer');
-            $table->integer('win_at');
+            $table->integer('year');
+            $table->string('title');
+            $table->string('studios');
+            $table->string('producers');
+            $table->enum('winner', ['yes', 'no']);
             $table->timestamps();
         });
     }

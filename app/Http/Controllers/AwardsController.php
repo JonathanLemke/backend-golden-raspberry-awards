@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Movie;
+use Illuminate\Support\Facades\DB;
 
 class AwardsController extends Controller
 {
+//
     public function getAwardsInterval()
     {
-        $longestGapProducers = Movie::select('producers as producer')
-            ->addSelect(DB::raw('MAX(year - lag) as interval'))
-            ->addSelect(DB::raw('MAX(lag) as previousWin'))
-            ->addSelect(DB::raw('MAX(year) as followingWin'))
+        $longestGapProducers = Movie::select('movies.producers as producer')
+            ->addSelect(DB::raw('MAX(movies.year - subq.lag) as interval'))
+            ->addSelect(DB::raw('MAX(subq.lag) as previousWin'))
+            ->addSelect(DB::raw('MAX(movies.year) as followingWin'))
             ->joinSub(
                 Movie::select('producers', 'year', DB::raw('LAG(year) OVER (PARTITION BY producers ORDER BY year) as lag')),
                 'subq',
                 'movies.producers',
                 'subq.producers'
             )
-            ->groupBy('producers')
+            ->groupBy('movies.producers')
             ->orderByDesc('interval')
             ->get();
 
